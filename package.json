@@ -1,0 +1,19 @@
+{
+  "name": "cciv",
+  "version": "0.0.1",
+  "description": "Content Credibility Indicator Vocabulary Spec + Tools",
+  "main": "server.js",
+  "scripts": {
+    "test": "standard && tap --cov test/test*.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/w3c/cciv.git"
+  },
+  "author": "Sandro Hawke (http://hawke.org/sandro)",
+  "license": "W3C",
+  "bugs": {
+    "url": "https://github.com/w3c/cciv/issues"
+  },
+  "homepage": "https://github.com/w3c/cciv#readme"
+}
