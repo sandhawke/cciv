@@ -6,7 +6,7 @@ if [ -z "$HOSTNAME" ]; then
 fi
 
 echo Consider:
-echo certbot certonly --agree-tos -t -m YOUREMAILADDR -d $HOSTNAME --standalone --pre-hook "service nginx stop" --post-hook "service nginx start"
+echo certbot certonly --agree-tos -t -m YOUREMAILADDR -d $HOSTNAME '--standalone --pre-hook "service nginx stop" --post-hook "service nginx start"'
 
 sed s/example.com/$HOSTNAME/ < nginx-config > /etc/nginx/sites-available/$HOSTNAME
 rm -f /etc/nginx/sites-enabled/$HOSTNAME
