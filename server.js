@@ -13,18 +13,22 @@ const s = new webgram.Server({port: 5505})
 s.app.get('/raw', async (req, res) => {
   res.send(await fetchIndicators())
 })
-s.app.get('/approved', async (req, res) => spec(req, res, true))
-s.app.get('/', async (req, res) => spec(req, res, false))
+s.app.get('/r/:rel', spec)
+s.app.get('/', spec)
 
-async function spec (req, res, approvedOnly) {
+async function spec (req, res) {
   const data = await fetchIndicators()
   const byCat = new Map()
   const parts = []
   for (const row of data) {
     debug('row: %o', row)
     if (!row.Name) continue // ignore rows with blank name
-    if (approvedOnly) {
-      if (row['Approved for Preliminary Vocabulary'] !== true) continue
+    if (req.params.rel) {
+      const rel = row['Release Target']
+      const wrel = +(req.params.rel)
+      console.log("%j %j", rel, wrel)
+      if (!rel) continue
+      if (rel > wrel) continue
     }
     setdefault(byCat, row.Category, []).push(row)
   }
