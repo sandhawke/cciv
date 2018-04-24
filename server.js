@@ -37,7 +37,7 @@ async function spec (req, res) {
   let versel = ''
   // versel text based on /r/1
   if (req.params.rel) {
-    versel = '<p>This version shows only the Release 1 Candidates (' + count + ' indicators).  See <a href="../..">version with all indicators</a>.</p>'
+    versel = '<p>This version shows only the Release 1 Candidates (' + count + ' indicators).  See <a href="..">version with all indicators</a>.</p>'
   } else {
     versel = '<p>This version includes all documented indicators.  You may want <a href="./r/1">Release 1 Candidates</a>.</p>'
   }
