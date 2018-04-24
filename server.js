@@ -9,7 +9,7 @@ const H = require('escape-html-template-tag')   // H.safe( ) if needed
 
 
 
-const s = new webgram.Server({port: 5505})
+const s = new webgram.Server({port: 5506})
 s.app.get('/raw', async (req, res) => {
   res.send(await fetchIndicators())
 })
@@ -20,6 +20,7 @@ async function spec (req, res) {
   const data = await fetchIndicators()
   const byCat = new Map()
   const parts = []
+  let count = 0
   for (const row of data) {
     debug('row: %o', row)
     if (!row.Name) continue // ignore rows with blank name
@@ -30,8 +31,17 @@ async function spec (req, res) {
       if (!rel) continue
       if (rel > wrel) continue
     }
+    count++
     setdefault(byCat, row.Category, []).push(row)
   }
+  let versel = ''
+  // versel text based on /r/1
+  if (req.params.rel) {
+    versel = '<p>This version shows only the Release 1 Candidates (' + count + ' indicators).  See <a href="../..">version with all indicators</a>.</p>'
+  } else {
+    versel = '<p>This version includes all documented indicators.  You may want <a href="./r/1">Release 1 Candidates</a>.</p>'
+  }
+
   const cats = Array.from(byCat.keys()).sort()
   debug('categories %O', cats)
   for (const cat of cats) {
@@ -67,13 +77,15 @@ async function spec (req, res) {
     parts.push('</section>\n')
   }
   const body = parts.join('')
+
   fs.readFile('index.html', 'utf8', (err, text) => {
     if (err) {
       console.error('error reading HTML source', err)
       res.error()
     }
-    const t2 = text.replace('<div id="replace-this"></div>', body)
-    res.send(t2)
+    const t2 = text.replace('<div id="replace-this">Failed</div>', body)
+    const t3 = t2.replace('<div id="version-selector"></div>', versel)
+    res.send(t3)
   })
 }
 s.start()

@@ -60,12 +60,15 @@ function tableData () {
     }
 
     function done (err) {
+      console.log('done called, err=', err)
       if (err) {
+        console.log('rejecting')
         reject(err)
         return
       }
       kept = gathering
       for (const r of waiting) {
+        console.log('resolving with data', kept.length, 'items')
         r(kept)
       }
       waiting = undefined
